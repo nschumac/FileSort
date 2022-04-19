@@ -15,7 +15,7 @@ void FileSort::Sort(const std::string& inFilePath, const std::string& outFilePat
 		// check some stuff for infile
 
 		if (!std::filesystem::exists(_inFilePath))
-			throw filesort_error("In File: path does not exist!");
+			throw filesort_error("In File: path does not exist! ");
 
 		if (!std::filesystem::is_regular_file(_inFilePath))
 			throw filesort_error("In File: is not a regular File, support only regular Files!");
