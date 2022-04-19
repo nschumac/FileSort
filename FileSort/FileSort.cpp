@@ -83,6 +83,7 @@ void FileSort::Sort(const std::string& inFilePath, const std::string& outFilePat
 			}
 		} while (numberRead != 0);
 
+		std::sort(_readLines.begin(), _readLines.end());
 		for (auto& s : _readLines)
 			segmentHandler.write(currentSegment, (void*)s.c_str(), s.length());
 		_readLines.clear();
