@@ -47,10 +47,10 @@ std::string SegmentHandler::read(const int& segment, const int& count)
 		if (fd == -1)
 			throw segmenthandler_error("Could not create File!");
 
-		segmentFile = fdopen(fd, "r");
+		segmentFile = fdopen(fd, "r+");
 
 		if (!segmentFile)
-			throw segmenthandler_error("Could not create File!");
+			throw segmenthandler_error("Could not open File!");
 			
 #elif _WIN32
 
@@ -147,25 +147,14 @@ void SegmentHandler::write(const int& segment, void* data, const int& count)
 	{
 		_positions.insert(std::make_pair(segment, 0));
 
-#ifdef __linux__
-
-		int fd = open(segmentPath.c_str(), O_RDWR | O_CREAT, 0666);
-
-		if (fd == -1)
-			throw segmenthandler_error("Could not create File!");
-
-		segmentFile = fdopen(fd, "w");
-
-		if (!segmentFile);
-		throw segmenthandler_error("Could not create File!");
-
-#elif _WIN32
+#ifdef _WIN32
 
 		segmentFile = CreateFile(segmentPath.native().c_str(), GENERIC_ALL, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 		if (segmentFile == INVALID_HANDLE_VALUE)
 			throw segmenthandler_error("Could not create File!");
 #endif
+
 	}
 	else
 	{
@@ -175,13 +164,6 @@ void SegmentHandler::write(const int& segment, void* data, const int& count)
 
 		if (!segmentFile)
 			throw segmenthandler_error("Could not open File!");
-		//throw Error
-
-		if (fseek(segmentFile, 0, SEEK_END))
-		{
-			fclose(segmentFile);
-			throw segmenthandler_error("Could not set File Position!");
-	}
 
 #elif _WIN32
 
@@ -196,7 +178,7 @@ void SegmentHandler::write(const int& segment, void* data, const int& count)
 
 	int bytesWritten = 0;
 
-	bytesWritten = fread(data, 1, count, segmentFile);
+	bytesWritten = fwrite(data, 1, count, segmentFile);
 
 	fclose(segmentFile);
 	if (bytesWritten < 0)
