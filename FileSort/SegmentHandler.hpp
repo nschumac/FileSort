@@ -1,6 +1,7 @@
 #include <filesystem>
 #include <string>
 #include <map>
+#include <vector>
 
 #ifdef __linux__
 
