@@ -3,26 +3,8 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <map>
 
-#include <filesystem>
-
-#ifdef __linux__
-
-#include <fcntl.h>
-#include <unistd.h>
-
-#elif _WIN32
-
-#include <Windows.h>
-
-#else
-
-#error Unsupported Version
-
-#endif
-
-
+#include "SegmentHandler.hpp"
 
 class FileSort
 {
@@ -55,6 +37,6 @@ public:
 
 	void Sort(const std::string& inFilePath, const std::string& outFilePath);
 
-	~FileSort();
+	~FileSort(){}
 
 };
